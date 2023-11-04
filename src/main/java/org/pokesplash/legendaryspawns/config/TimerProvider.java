@@ -1,7 +1,6 @@
 package org.pokesplash.legendaryspawns.config;
 
 import org.pokesplash.legendaryspawns.LegendarySpawns;
-import org.pokesplash.legendaryspawns.util.CobblemonUtils;
 import org.pokesplash.legendaryspawns.util.SpawnUtils;
 
 import java.util.Timer;
