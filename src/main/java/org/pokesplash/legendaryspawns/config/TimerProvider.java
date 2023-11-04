@@ -26,7 +26,9 @@ public abstract class TimerProvider {
 	}
 
 	public static void shutdown() {
-		timer.cancel();
+		if (timer != null) {
+			timer.cancel();
+		}
 	}
 
 }
