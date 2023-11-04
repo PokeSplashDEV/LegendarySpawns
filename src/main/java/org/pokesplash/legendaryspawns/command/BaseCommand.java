@@ -11,7 +11,7 @@ import org.pokesplash.legendaryspawns.util.LuckPermsUtils;
 public class BaseCommand {
 	public void register(CommandDispatcher<ServerCommandSource> dispatcher) {
 		LiteralArgumentBuilder<ServerCommandSource> root = CommandManager
-				.literal("fabrictemplate")
+				.literal("legendaryspawns")
 				.requires(ctx -> {
 					if (ctx.isExecutedByPlayer()) {
 						return LuckPermsUtils.hasPermission(ctx.getPlayer(), CommandHandler.basePermission + ".base");
@@ -23,22 +23,12 @@ public class BaseCommand {
 
 		LiteralCommandNode<ServerCommandSource> registeredCommand = dispatcher.register(root);
 
-		dispatcher.register(CommandManager.literal("fabtemp").requires(
-				ctx -> {
-					if (ctx.isExecutedByPlayer()) {
-						return LuckPermsUtils.hasPermission(ctx.getPlayer(), CommandHandler.basePermission + ".base");
-					} else {
-						return true;
-					}
-				})
-				.redirect(registeredCommand).executes(this::run));
-
 		registeredCommand.addChild(new ReloadCommand().build());
 
 	}
 
 	public int run(CommandContext<ServerCommandSource> context) {
-		System.out.println("Base command run");
+		System.out.println("§b§lLegendary Spawns");
 		return 1;
 	}
 }
