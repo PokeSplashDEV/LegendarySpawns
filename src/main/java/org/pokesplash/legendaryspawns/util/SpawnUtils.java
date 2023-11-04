@@ -95,6 +95,7 @@ public abstract class SpawnUtils {
 			}
 
 			legendary.setSpecies(species);
+			legendary.setLevel(70);
 
 			PokemonProperties properties = new PokemonProperties();
 			properties.apply(legendary);
