@@ -294,13 +294,14 @@ public abstract class Utils {
 	 * Replaces placeholders
 	 * @return Amended string.
 	 */
-	public static String formatPlaceholders(String message, PokemonEntity pokemon, String player) {
+	public static String formatPlaceholders(String message, PokemonEntity pokemon, String player, String biome) {
 		return message
 				.replaceAll("\\{pokemon\\}", pokemon.getPokemon().getDisplayName().getString())
 				.replaceAll("\\{player\\}", player)
 				.replaceAll("\\{x\\}", String.valueOf(pokemon.getPos().getX()))
 				.replaceAll("\\{y\\}", String.valueOf(pokemon.getPos().getY()))
-				.replaceAll("\\{z\\}", String.valueOf(pokemon.getPos().getZ()));
+				.replaceAll("\\{z\\}", String.valueOf(pokemon.getPos().getZ()))
+				.replaceAll("\\{biome\\}", biome);
 	}
 
 	/**

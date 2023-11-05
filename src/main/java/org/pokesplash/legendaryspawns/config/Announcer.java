@@ -17,9 +17,9 @@ public class Announcer {
 
 	public Announcer() {
 		announceShinies = true;
-		shinyMessage = "§aA §3Shiny §b{pokemon} §ahas spawned at §6{x} {y} {z} §anear §b{player}";
+		shinyMessage = "§aA §3Shiny §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear §b{player}";
 		announceLegendaries = true;
-		legendaryMessage = "§aA §5Legendary §b{pokemon} §ahas spawned at §6{x} {y} {z} §anear §b{player}";
+		legendaryMessage = "§aA §5Legendary §b{pokemon} §ahas spawned in a §b{biome} at §6{x} {y} {z} §anear §b{player}";
 	}
 
 	public void init() {

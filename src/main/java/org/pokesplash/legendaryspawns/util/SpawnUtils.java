@@ -4,7 +4,6 @@ import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.pokemon.stats.Stat;
 import com.cobblemon.mod.common.api.pokemon.stats.Stats;
-import com.cobblemon.mod.common.api.spawning.context.SpawningContext;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.Species;
@@ -19,8 +18,6 @@ import org.pokesplash.legendaryspawns.LegendarySpawns;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class SpawnUtils {
@@ -110,7 +107,7 @@ public abstract class SpawnUtils {
 			player.getWorld().spawnEntity(entity);
 
 
-			checkConditions(entity, player.getName().getString());
+			checkConditions(entity, player.getName().getString(), playerBiomes.get(player));
 		}
 
 	}
@@ -127,19 +124,23 @@ public abstract class SpawnUtils {
 		return Utils.getRandomValue(positions);
 	}
 
-	public static void checkConditions(PokemonEntity entity, String playerName) {
+	public static void checkConditions(PokemonEntity entity, String playerName, String biome) {
 		Pokemon pokemon = entity.getPokemon();
 
 		if (LegendarySpawns.announcer.isAnnounceLegendaries() && pokemon.isLegendary()) {
 			Utils.broadcastMessage(
 					Utils.formatPlaceholders(LegendarySpawns.announcer.getLegendaryMessage(),
-							entity, playerName));
+							entity, playerName, formatBiome(biome)));
+			LegendarySpawns.LOGGER.info("Legend Spawn: " + pokemon.getDisplayName().getString() +
+					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
 		}
 
 		if (LegendarySpawns.announcer.isAnnounceShinies() && pokemon.getShiny()) {
 			Utils.broadcastMessage(
 					Utils.formatPlaceholders(LegendarySpawns.announcer.getShinyMessage(),
-							entity, playerName));
+							entity, playerName, formatBiome(biome)));
+			LegendarySpawns.LOGGER.info("Shiny Spawn: " + pokemon.getDisplayName().getString() +
+					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
 		}
 	}
 
@@ -178,5 +179,20 @@ public abstract class SpawnUtils {
 		}
 
 		return new SpawnDetails(player, pokemon);
+	}
+
+	private static String formatBiome(String biome) {
+		// Removes namespace
+		String[] split = biome.split(":");
+
+		String[] names = split[1].split("_");
+
+		String output = "";
+
+		for (String name : names) {
+			output += Utils.capitaliseFirst(name) + " ";
+		}
+
+		return output.trim();
 	}
 }
