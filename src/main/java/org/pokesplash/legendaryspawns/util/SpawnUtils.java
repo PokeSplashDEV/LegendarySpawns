@@ -19,56 +19,53 @@ import org.pokesplash.legendaryspawns.LegendarySpawns;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class SpawnUtils {
 
 	public static void SpawnLegendary() {
-		HashMap<ServerPlayerEntity, String> playerBiomes = new HashMap<>();
-
-		ArrayList<ServerPlayerEntity> players =
-				new ArrayList<>(LegendarySpawns.world.getPlayerManager().getPlayerList());
-
-		if (players.isEmpty()) {
-			return;
-		}
-
-		for (ServerPlayerEntity player : players) {
-			Vec3d playerPosition = player.getPos();
-			World world = player.getWorld();
-
-			BlockPos pos = new BlockPos(
-					(int) playerPosition.getX(),
-					(int) playerPosition.getY(),
-					(int) playerPosition.getZ());
-
-			RegistryKey<Biome> biome = world.getBiome(pos).getKey().get();
-			playerBiomes.put(player, biome.getValue().toString());
-		}
 
 		int randomNumber = ThreadLocalRandom.current().nextInt(1, 11);
 
+		// If spawn chance is success
 		if (randomNumber <= LegendarySpawns.config.getSpawnChance() * 10) {
 
-			ServerPlayerEntity player = Utils.getRandomValue(players);
+			// Get biome of each player
+			HashMap<ServerPlayerEntity, String> playerBiomes = new HashMap<>();
 
-			String biome = playerBiomes.get(player);
+			// Get all players online.
+			ArrayList<ServerPlayerEntity> players =
+					new ArrayList<>(LegendarySpawns.world.getPlayerManager().getPlayerList());
 
-			HashMap<String, ArrayList<String>> legendaryBiomes = LegendarySpawns.config.getPokemon();
-
-			ArrayList<String> pokemon = new ArrayList<>();
-
-			for (String mon : legendaryBiomes.keySet()) {
-				for (String legendaryBiome : legendaryBiomes.get(mon)) {
-					if (legendaryBiome.equals(biome)) {
-						pokemon.add(mon);
-					}
-				}
-			}
-
-			if (pokemon.isEmpty()) {
+			// If no players, no spawn.
+			if (players.isEmpty()) {
 				return;
 			}
+
+			// For each player, add them and their biome to the hashmap.
+			for (ServerPlayerEntity player : players) {
+				Vec3d playerPosition = player.getPos();
+				World world = player.getWorld();
+
+				BlockPos pos = new BlockPos(
+						(int) playerPosition.getX(),
+						(int) playerPosition.getY(),
+						(int) playerPosition.getZ());
+
+				RegistryKey<Biome> biome = world.getBiome(pos).getKey().get();
+				playerBiomes.put(player, biome.getValue().toString());
+			}
+
+			SpawnDetails values = getValidDetails(playerBiomes);
+
+			if (values == null) {
+				return;
+			}
+
+			ServerPlayerEntity player = values.getPlayer();
+			ArrayList<String> pokemon = values.getPokemon();
 
 			Pokemon legendary = new Pokemon().initialize();
 
@@ -144,5 +141,42 @@ public abstract class SpawnUtils {
 					Utils.formatPlaceholders(LegendarySpawns.announcer.getShinyMessage(),
 							entity, playerName));
 		}
+	}
+
+	private static SpawnDetails
+	getValidDetails(HashMap<ServerPlayerEntity, String> playerBiomes) {
+
+		if (playerBiomes.isEmpty()) {
+			return null;
+		}
+
+		ArrayList<ServerPlayerEntity> players = new ArrayList<>(playerBiomes.keySet());
+
+		// Random player
+		ServerPlayerEntity player = Utils.getRandomValue(players);
+
+		// Get players biome
+		String biome = playerBiomes.get(player);
+
+		// All legendary biomes
+		HashMap<String, ArrayList<String>> legendaryBiomes = LegendarySpawns.config.getPokemon();
+
+
+		ArrayList<String> pokemon = new ArrayList<>();
+
+		for (String mon : legendaryBiomes.keySet()) {
+			for (String legendaryBiome : legendaryBiomes.get(mon)) {
+				if (legendaryBiome.equals(biome)) {
+					pokemon.add(mon);
+				}
+			}
+		}
+
+		if (pokemon.isEmpty()) {
+			playerBiomes.remove(player);
+			return getValidDetails(playerBiomes);
+		}
+
+		return new SpawnDetails(player, pokemon);
 	}
 }
