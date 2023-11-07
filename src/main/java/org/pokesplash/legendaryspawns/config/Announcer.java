@@ -13,6 +13,10 @@ public class Announcer {
 	private String shinyMessage;
 	private boolean announceLegendaries;
 	private String legendaryMessage;
+	private boolean announceUltrabeasts;
+	private String ultrabeastMessage;
+	private boolean announceParadox;
+	private String paradoxMessage;
 
 
 	public Announcer() {
@@ -20,6 +24,12 @@ public class Announcer {
 		shinyMessage = "§aA §3Shiny §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear §b{player}";
 		announceLegendaries = true;
 		legendaryMessage = "§aA §5Legendary §b{pokemon} §ahas spawned in a §b{biome} at §6{x} {y} {z} §anear §b{player}";
+		announceUltrabeasts = true;
+		ultrabeastMessage = "§aA §3Ultrabeast §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear " +
+				"§b{player}";
+		announceParadox = true;
+		paradoxMessage = "§aA §3Paradox §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear " +
+				"§b{player}";
 	}
 
 	public void init() {
@@ -31,6 +41,10 @@ public class Announcer {
 					shinyMessage = cfg.getShinyMessage();
 					announceLegendaries = cfg.isAnnounceLegendaries();
 					legendaryMessage = cfg.getLegendaryMessage();
+					announceUltrabeasts = cfg.isAnnounceUltrabeasts();
+					ultrabeastMessage = cfg.getUltrabeastMessage();
+					announceParadox = cfg.isAnnounceParadox();
+					paradoxMessage = cfg.getParadoxMessage();
 				});
 
 		if (!futureRead.join()) {
@@ -64,5 +78,21 @@ public class Announcer {
 
 	public String getLegendaryMessage() {
 		return legendaryMessage;
+	}
+
+	public boolean isAnnounceUltrabeasts() {
+		return announceUltrabeasts;
+	}
+
+	public String getUltrabeastMessage() {
+		return ultrabeastMessage;
+	}
+
+	public boolean isAnnounceParadox() {
+		return announceParadox;
+	}
+
+	public String getParadoxMessage() {
+		return paradoxMessage;
 	}
 }

@@ -18,6 +18,7 @@ import org.pokesplash.legendaryspawns.LegendarySpawns;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class SpawnUtils {
@@ -104,8 +105,8 @@ public abstract class SpawnUtils {
 			BlockPos spawnLocation = player.getWorld().getTopPosition(Heightmap.Type.WORLD_SURFACE, randomLocation);
 
 			entity.setPos(spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ());
+			entity.setInvulnerable(true);
 			player.getWorld().spawnEntity(entity);
-
 
 			checkConditions(entity, player.getName().getString(), playerBiomes.get(player));
 		}
@@ -127,6 +128,8 @@ public abstract class SpawnUtils {
 	public static void checkConditions(PokemonEntity entity, String playerName, String biome) {
 		Pokemon pokemon = entity.getPokemon();
 
+		HashSet<String> labels = pokemon.getSpecies().getLabels();
+
 		if (LegendarySpawns.announcer.isAnnounceLegendaries() && pokemon.isLegendary()) {
 			Utils.broadcastMessage(
 					Utils.formatPlaceholders(LegendarySpawns.announcer.getLegendaryMessage(),
@@ -140,6 +143,22 @@ public abstract class SpawnUtils {
 					Utils.formatPlaceholders(LegendarySpawns.announcer.getShinyMessage(),
 							entity, playerName, formatBiome(biome)));
 			LegendarySpawns.LOGGER.info("Shiny Spawn: " + pokemon.getDisplayName().getString() +
+					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
+		}
+
+		if (LegendarySpawns.announcer.isAnnounceUltrabeasts() && pokemon.isUltraBeast()) {
+			Utils.broadcastMessage(
+					Utils.formatPlaceholders(LegendarySpawns.announcer.getUltrabeastMessage(),
+							entity, playerName, formatBiome(biome)));
+			LegendarySpawns.LOGGER.info("Ultrabeast Spawn: " + pokemon.getDisplayName().getString() +
+					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
+		}
+
+		if (LegendarySpawns.announcer.isAnnounceParadox() && labels.contains("paradox")) {
+			Utils.broadcastMessage(
+					Utils.formatPlaceholders(LegendarySpawns.announcer.getParadoxMessage(),
+							entity, playerName, formatBiome(biome)));
+			LegendarySpawns.LOGGER.info("Paradox Spawn: " + pokemon.getDisplayName().getString() +
 					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
 		}
 	}
