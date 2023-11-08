@@ -304,6 +304,12 @@ public abstract class Utils {
 				.replaceAll("\\{biome\\}", biome);
 	}
 
+	public static String formatPlaceholders(String message, Pokemon pokemon, String player) {
+		return message
+				.replaceAll("\\{pokemon\\}", pokemon.getDisplayName().getString())
+				.replaceAll("\\{player\\}", player);
+	}
+
 	/**
 	 * Parses item ID string to an item stack
 	 * @param id The id to parse to

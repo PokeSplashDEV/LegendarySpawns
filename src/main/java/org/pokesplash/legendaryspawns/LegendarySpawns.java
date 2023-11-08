@@ -12,6 +12,7 @@ import org.pokesplash.legendaryspawns.command.CommandHandler;
 import org.pokesplash.legendaryspawns.config.Announcer;
 import org.pokesplash.legendaryspawns.config.Config;
 import org.pokesplash.legendaryspawns.config.TimerProvider;
+import org.pokesplash.legendaryspawns.event.PokemonCatchEvent;
 import org.pokesplash.legendaryspawns.event.PokemonSpawnEvent;
 
 public class LegendarySpawns implements ModInitializer {
@@ -30,6 +31,7 @@ public class LegendarySpawns implements ModInitializer {
 		CommandRegistrationCallback.EVENT.register(CommandHandler::registerCommands);
 		ServerWorldEvents.LOAD.register((t, e) -> world = t);
 		new PokemonSpawnEvent().registerEvent();
+		new PokemonCatchEvent().registerEvent();
 		load();
 
 		ServerLifecycleEvents.SERVER_STOPPING.register(e -> {

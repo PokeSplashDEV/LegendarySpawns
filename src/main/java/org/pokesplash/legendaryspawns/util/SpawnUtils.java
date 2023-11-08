@@ -132,7 +132,7 @@ public abstract class SpawnUtils {
 
 		if (LegendarySpawns.announcer.isAnnounceLegendaries() && pokemon.isLegendary()) {
 			Utils.broadcastMessage(
-					Utils.formatPlaceholders(LegendarySpawns.announcer.getLegendaryMessage(),
+					Utils.formatPlaceholders(LegendarySpawns.announcer.getLegendarySpawnMessage(),
 							entity, playerName, formatBiome(biome)));
 			LegendarySpawns.LOGGER.info("Legend Spawn: " + pokemon.getDisplayName().getString() +
 					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
@@ -140,7 +140,7 @@ public abstract class SpawnUtils {
 
 		if (LegendarySpawns.announcer.isAnnounceShinies() && pokemon.getShiny()) {
 			Utils.broadcastMessage(
-					Utils.formatPlaceholders(LegendarySpawns.announcer.getShinyMessage(),
+					Utils.formatPlaceholders(LegendarySpawns.announcer.getShinySpawnMessage(),
 							entity, playerName, formatBiome(biome)));
 			LegendarySpawns.LOGGER.info("Shiny Spawn: " + pokemon.getDisplayName().getString() +
 					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
@@ -148,7 +148,7 @@ public abstract class SpawnUtils {
 
 		if (LegendarySpawns.announcer.isAnnounceUltrabeasts() && pokemon.isUltraBeast()) {
 			Utils.broadcastMessage(
-					Utils.formatPlaceholders(LegendarySpawns.announcer.getUltrabeastMessage(),
+					Utils.formatPlaceholders(LegendarySpawns.announcer.getUltrabeastSpawnMessage(),
 							entity, playerName, formatBiome(biome)));
 			LegendarySpawns.LOGGER.info("Ultrabeast Spawn: " + pokemon.getDisplayName().getString() +
 					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());
@@ -156,7 +156,7 @@ public abstract class SpawnUtils {
 
 		if (LegendarySpawns.announcer.isAnnounceParadox() && labels.contains("paradox")) {
 			Utils.broadcastMessage(
-					Utils.formatPlaceholders(LegendarySpawns.announcer.getParadoxMessage(),
+					Utils.formatPlaceholders(LegendarySpawns.announcer.getParadoxSpawnMessage(),
 							entity, playerName, formatBiome(biome)));
 			LegendarySpawns.LOGGER.info("Paradox Spawn: " + pokemon.getDisplayName().getString() +
 					" - " + entity.getX() + " " + entity.getY() + " " + entity.getZ());

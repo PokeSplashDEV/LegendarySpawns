@@ -4,32 +4,38 @@ import com.google.gson.Gson;
 import org.pokesplash.legendaryspawns.LegendarySpawns;
 import org.pokesplash.legendaryspawns.util.Utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.CompletableFuture;
 
 public class Announcer {
 	private boolean announceShinies;
-	private String shinyMessage;
+	private String shinySpawnMessage;
+	private String shinyCaughtMessage;
 	private boolean announceLegendaries;
-	private String legendaryMessage;
+	private String legendarySpawnMessage;
+	private String legendaryCaughtMessage;
 	private boolean announceUltrabeasts;
-	private String ultrabeastMessage;
+	private String ultrabeastSpawnMessage;
+	private String ultrabeastCaughtMessage;
 	private boolean announceParadox;
-	private String paradoxMessage;
+	private String paradoxSpawnMessage;
+	private String paradoxCaughtMessage;
 
 
 	public Announcer() {
 		announceShinies = true;
-		shinyMessage = "§aA §3Shiny §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear §b{player}";
+		shinySpawnMessage = "§aA §eShiny §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear §b{player}";
+		shinyCaughtMessage = "§b{player} §acaught a §eShiny §b{pokemon}";
 		announceLegendaries = true;
-		legendaryMessage = "§aA §5Legendary §b{pokemon} §ahas spawned in a §b{biome} at §6{x} {y} {z} §anear §b{player}";
+		legendarySpawnMessage = "§aA §5Legendary §b{pokemon} §ahas spawned in a §b{biome} at §6{x} {y} {z} §anear §b{player}";
+		legendaryCaughtMessage = "§b{player} §acaught a §5Legendary §b{pokemon}";
 		announceUltrabeasts = true;
-		ultrabeastMessage = "§aA §3Ultrabeast §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear " +
+		ultrabeastSpawnMessage = "§aA §3Ultrabeast §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear " +
 				"§b{player}";
+		ultrabeastCaughtMessage = "§b{player} §acaught an §3Ultrabeast §b{pokemon}";
 		announceParadox = true;
-		paradoxMessage = "§aA §3Paradox §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear " +
+		paradoxSpawnMessage = "§aA §3Paradox §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear " +
 				"§b{player}";
+		paradoxCaughtMessage = "§b{player} §acaught an §3Paradox §b{pokemon}";
 	}
 
 	public void init() {
@@ -38,13 +44,17 @@ public class Announcer {
 					Gson gson = Utils.newGson();
 					Announcer cfg = gson.fromJson(el, Announcer.class);
 					announceShinies = cfg.isAnnounceShinies();
-					shinyMessage = cfg.getShinyMessage();
+					shinySpawnMessage = cfg.getShinySpawnMessage();
 					announceLegendaries = cfg.isAnnounceLegendaries();
-					legendaryMessage = cfg.getLegendaryMessage();
+					legendarySpawnMessage = cfg.getLegendarySpawnMessage();
 					announceUltrabeasts = cfg.isAnnounceUltrabeasts();
-					ultrabeastMessage = cfg.getUltrabeastMessage();
+					ultrabeastSpawnMessage = cfg.getUltrabeastSpawnMessage();
 					announceParadox = cfg.isAnnounceParadox();
-					paradoxMessage = cfg.getParadoxMessage();
+					paradoxSpawnMessage = cfg.getParadoxSpawnMessage();
+					shinyCaughtMessage = cfg.getShinyCaughtMessage();
+					legendaryCaughtMessage = cfg.getLegendaryCaughtMessage();
+					ultrabeastCaughtMessage = cfg.getUltrabeastCaughtMessage();
+					paradoxCaughtMessage = cfg.getParadoxCaughtMessage();
 				});
 
 		if (!futureRead.join()) {
@@ -72,27 +82,43 @@ public class Announcer {
 		return announceLegendaries;
 	}
 
-	public String getShinyMessage() {
-		return shinyMessage;
+	public String getShinySpawnMessage() {
+		return shinySpawnMessage;
 	}
 
-	public String getLegendaryMessage() {
-		return legendaryMessage;
+	public String getLegendarySpawnMessage() {
+		return legendarySpawnMessage;
 	}
 
 	public boolean isAnnounceUltrabeasts() {
 		return announceUltrabeasts;
 	}
 
-	public String getUltrabeastMessage() {
-		return ultrabeastMessage;
+	public String getUltrabeastSpawnMessage() {
+		return ultrabeastSpawnMessage;
 	}
 
 	public boolean isAnnounceParadox() {
 		return announceParadox;
 	}
 
-	public String getParadoxMessage() {
-		return paradoxMessage;
+	public String getParadoxSpawnMessage() {
+		return paradoxSpawnMessage;
+	}
+
+	public String getShinyCaughtMessage() {
+		return shinyCaughtMessage;
+	}
+
+	public String getLegendaryCaughtMessage() {
+		return legendaryCaughtMessage;
+	}
+
+	public String getUltrabeastCaughtMessage() {
+		return ultrabeastCaughtMessage;
+	}
+
+	public String getParadoxCaughtMessage() {
+		return paradoxCaughtMessage;
 	}
 }
