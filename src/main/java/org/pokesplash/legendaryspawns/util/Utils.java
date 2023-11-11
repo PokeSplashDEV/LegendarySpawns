@@ -318,9 +318,9 @@ public abstract class Utils {
 				if (isHoverable) {
 					component = Text.empty().append(component).append(pkm);
 				} else {
-					component = Text.empty().append(component).append(
-							Text.literal(pokemon.getDisplayName().getString())
-					);
+					component =
+							Text.empty().append(component).append(pokemon.getPokemon().getDisplayName()
+									.setStyle(Style.EMPTY.withColor(TextColor.parse("aqua"))));
 				}
 
 				component = Text.empty().append(component).append(Text.literal(splits[x]));
@@ -345,7 +345,8 @@ public abstract class Utils {
 				if (isHoverable) {
 					component = Text.empty().append(component).append(pkm);
 				} else {
-					component = Text.empty().append(component).append(pokemon.getDisplayName());
+					Text.empty().append(component).append(pokemon.getDisplayName()
+							.setStyle(Style.EMPTY.withColor(TextColor.parse("aqua"))));
 				}
 
 				component = Text.empty().append(component).append(Text.literal(splits[x]));
