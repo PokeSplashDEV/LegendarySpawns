@@ -19,6 +19,8 @@ public class Announcer {
 	private boolean announceParadox;
 	private String paradoxSpawnMessage;
 	private String paradoxCaughtMessage;
+	private boolean spawnHoverable;
+	private boolean captureHoverable;
 
 
 	public Announcer() {
@@ -36,6 +38,8 @@ public class Announcer {
 		paradoxSpawnMessage = "§aA §3Paradox §b{pokemon} §ahas spawned in a §b{biome} §aat §6{x} {y} {z} §anear " +
 				"§b{player}";
 		paradoxCaughtMessage = "§b{player} §acaught an §3Paradox §b{pokemon}";
+		captureHoverable = true;
+		spawnHoverable = true;
 	}
 
 	public void init() {
@@ -55,6 +59,8 @@ public class Announcer {
 					legendaryCaughtMessage = cfg.getLegendaryCaughtMessage();
 					ultrabeastCaughtMessage = cfg.getUltrabeastCaughtMessage();
 					paradoxCaughtMessage = cfg.getParadoxCaughtMessage();
+					spawnHoverable = cfg.isSpawnHoverable();
+					captureHoverable = cfg.isCaptureHoverable();
 				});
 
 		if (!futureRead.join()) {
@@ -120,5 +126,13 @@ public class Announcer {
 
 	public String getParadoxCaughtMessage() {
 		return paradoxCaughtMessage;
+	}
+
+	public boolean isSpawnHoverable() {
+		return spawnHoverable;
+	}
+
+	public boolean isCaptureHoverable() {
+		return captureHoverable;
 	}
 }

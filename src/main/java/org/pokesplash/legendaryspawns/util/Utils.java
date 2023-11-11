@@ -1,5 +1,7 @@
 package org.pokesplash.legendaryspawns.util;
 
+import com.cobblemon.mod.common.api.pokemon.stats.Stats;
+import com.cobblemon.mod.common.api.types.ElementalType;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.google.gson.Gson;
@@ -8,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import org.pokesplash.legendaryspawns.LegendarySpawns;
 
 import java.io.File;
@@ -23,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -294,20 +297,62 @@ public abstract class Utils {
 	 * Replaces placeholders
 	 * @return Amended string.
 	 */
-	public static String formatPlaceholders(String message, PokemonEntity pokemon, String player, String biome) {
-		return message
-				.replaceAll("\\{pokemon\\}", pokemon.getPokemon().getDisplayName().getString())
+	public static Text formatPlaceholders(String message, PokemonEntity pokemon, String player, String biome,
+	                                      boolean isHoverable) {
+
+		Text pkm = pokemon.getPokemon().getDisplayName().setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
+				HoverEvent.Action.SHOW_TEXT, formatPokemonHoverable(pokemon.getPokemon())))
+				.withColor(TextColor.parse("aqua")));
+
+		String[] splits = message
 				.replaceAll("\\{player\\}", player)
 				.replaceAll("\\{x\\}", String.valueOf(pokemon.getPos().getX()))
 				.replaceAll("\\{y\\}", String.valueOf(pokemon.getPos().getY()))
 				.replaceAll("\\{z\\}", String.valueOf(pokemon.getPos().getZ()))
-				.replaceAll("\\{biome\\}", biome);
+				.replaceAll("\\{biome\\}", biome).split("\\{pokemon\\}");
+
+		Text component = Text.literal(splits[0]);
+
+		if (splits.length > 1) {
+			for (int x=1; x < splits.length; x++) {
+				if (isHoverable) {
+					component = Text.empty().append(component).append(pkm);
+				} else {
+					component = Text.empty().append(component).append(
+							Text.literal(pokemon.getDisplayName().getString())
+					);
+				}
+
+				component = Text.empty().append(component).append(Text.literal(splits[x]));
+			}
+		}
+
+		return component;
 	}
 
-	public static String formatPlaceholders(String message, Pokemon pokemon, String player) {
-		return message
-				.replaceAll("\\{pokemon\\}", pokemon.getDisplayName().getString())
-				.replaceAll("\\{player\\}", player);
+	public static Text formatPlaceholders(String message, Pokemon pokemon, String player, boolean isHoverable) {
+
+		Text pkm = pokemon.getDisplayName().setStyle(Style.EMPTY.withHoverEvent(new HoverEvent(
+				HoverEvent.Action.SHOW_TEXT, formatPokemonHoverable(pokemon)))
+				.withColor(TextColor.parse("aqua")));
+
+		String[] splits = message.replaceAll("\\{player\\}", player).split("\\{pokemon\\}");
+
+		Text component = Text.literal(splits[0]);
+
+		if (splits.length > 1) {
+			for (int x=1; x < splits.length; x ++) {
+				if (isHoverable) {
+					component = Text.empty().append(component).append(pkm);
+				} else {
+					component = Text.empty().append(component).append(pokemon.getDisplayName());
+				}
+
+				component = Text.empty().append(component).append(Text.literal(splits[x]));
+			}
+		}
+
+		return component;
 	}
 
 	/**
@@ -327,12 +372,79 @@ public abstract class Utils {
 		return list.get(random.nextInt(list.size()));
 	}
 
-	public static void broadcastMessage(String message) {
+	public static void broadcastMessage(Text message) {
 		MinecraftServer server = LegendarySpawns.world;
 		ArrayList<ServerPlayerEntity> players = new ArrayList<>(server.getPlayerManager().getPlayerList());
 
 		for (ServerPlayerEntity pl : players) {
-			pl.sendMessage(Text.literal(message));
+			pl.sendMessage(message);
 		}
+	}
+
+	private static Text formatPokemonHoverable(Pokemon pokemon) {
+		Style aqua = Style.EMPTY.withColor(TextColor.parse("aqua"));
+		Style dark_aqua = Style.EMPTY.withColor(TextColor.parse("dark_aqua"));
+		Style dark_green = Style.EMPTY.withColor(TextColor.parse("dark_green"));
+		Style dark_purple = Style.EMPTY.withColor(TextColor.parse("dark_purple"));
+		Style gold = Style.EMPTY.withColor(TextColor.parse("gold"));
+		Style gray = Style.EMPTY.withColor(TextColor.parse("gray"));
+		Style green = Style.EMPTY.withColor(TextColor.parse("green"));
+		Style red = Style.EMPTY.withColor(TextColor.parse("red"));
+		Style light_purple = Style.EMPTY.withColor(TextColor.parse("light_purple"));
+		Style yellow = Style.EMPTY.withColor(TextColor.parse("yellow"));
+
+		MutableText types = Text.empty().setStyle(green);
+		for (ElementalType type : pokemon.getSpecies().getTypes()) {
+			types.append(" ").append(type.getDisplayName());
+		}
+
+		MutableText ability = Text.translatable("cobblemon.ui.info.ability").setStyle(dark_green).append(": ")
+				.append(Text.translatable(pokemon.getAbility().getDisplayName()).setStyle(green));
+		if (CobblemonUtils.isHA(pokemon)) {
+			ability.append(Text.literal(" §b(HA)"));
+		}
+
+		return Text.empty()
+				.append(pokemon.getSpecies().getTranslatedName().setStyle(aqua))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.info.type").setStyle(dark_green).append(":").append(types))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.info.nature").setStyle(dark_green).append(": ")
+						.append(Text.translatable(pokemon.getNature().getDisplayName()).setStyle(green)))
+				.append("\n")
+				.append(ability)
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.stats").setStyle(gray).append(": "))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.stats.hp").setStyle(light_purple)
+						.append(" §a" +
+								(pokemon.getIvs().get(Stats.HP) == null ? "0" :
+										pokemon.getIvs().get(Stats.HP))))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.stats.atk").setStyle(red)
+						.append(" §a" +
+								(pokemon.getIvs().get(Stats.ATTACK) == null ? "0" :
+										pokemon.getIvs().get(Stats.ATTACK))))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.stats.def").setStyle(gold)
+						.append(" §a" +
+								(pokemon.getIvs().get(Stats.DEFENCE) == null ? "0" :
+										pokemon.getIvs().get(Stats.DEFENCE))))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.stats.sp_atk").setStyle(dark_purple)
+						.append(" §a" +
+								(pokemon.getIvs().get(Stats.SPECIAL_ATTACK) == null ? "0" :
+										pokemon.getIvs().get(Stats.SPECIAL_ATTACK))))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.stats.sp_def").setStyle(yellow)
+						.append(" §a" +
+								(pokemon.getIvs().get(Stats.SPECIAL_DEFENCE) == null ? "0" :
+										pokemon.getIvs().get(Stats.SPECIAL_DEFENCE))))
+				.append("\n")
+				.append(Text.translatable("cobblemon.ui.stats.speed").setStyle(dark_aqua)
+						.append(" §a" +
+								(pokemon.getIvs().get(Stats.SPEED) == null ? "0" :
+										pokemon.getIvs().get(Stats.SPEED))));
+
 	}
 }
