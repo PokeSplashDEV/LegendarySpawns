@@ -304,7 +304,7 @@ public abstract class Utils {
 				HoverEvent.Action.SHOW_TEXT, formatPokemonHoverable(pokemon.getPokemon())))
 				.withColor(TextColor.parse("aqua")));
 
-		String[] splits = message
+		String[] splits = (message + "\n")
 				.replaceAll("\\{player\\}", player)
 				.replaceAll("\\{x\\}", String.valueOf(pokemon.getPos().getX()))
 				.replaceAll("\\{y\\}", String.valueOf(pokemon.getPos().getY()))
@@ -323,7 +323,8 @@ public abstract class Utils {
 									.setStyle(Style.EMPTY.withColor(TextColor.parse("aqua"))));
 				}
 
-				component = Text.empty().append(component).append(Text.literal(splits[x]));
+				component = Text.empty().append(component).append(
+						Text.literal(splits[x].replaceAll("\n", "")));
 			}
 		}
 
@@ -336,7 +337,7 @@ public abstract class Utils {
 				HoverEvent.Action.SHOW_TEXT, formatPokemonHoverable(pokemon)))
 				.withColor(TextColor.parse("aqua")));
 
-		String[] splits = message.replaceAll("\\{player\\}", player).split("\\{pokemon\\}");
+		String[] splits = (message + "\n").replaceAll("\\{player\\}", player).split("\\{pokemon\\}");
 
 		Text component = Text.literal(splits[0]);
 
@@ -349,7 +350,8 @@ public abstract class Utils {
 							.setStyle(Style.EMPTY.withColor(TextColor.parse("aqua"))));
 				}
 
-				component = Text.empty().append(component).append(Text.literal(splits[x]));
+				component = Text.empty().append(component).append(
+						Text.literal(splits[x].replaceAll("\n", "")));
 			}
 		}
 
