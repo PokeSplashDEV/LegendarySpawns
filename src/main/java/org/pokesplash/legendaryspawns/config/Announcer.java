@@ -135,4 +135,34 @@ public class Announcer {
 	public boolean isCaptureHoverable() {
 		return captureHoverable;
 	}
+
+	public void setAnnounceShinies(boolean announceShinies) {
+		this.announceShinies = announceShinies;
+		write();
+	}
+
+	public void setAnnounceLegendaries(boolean announceLegendaries) {
+		this.announceLegendaries = announceLegendaries;
+		write();
+	}
+
+	public void setAnnounceUltrabeasts(boolean announceUltrabeasts) {
+		this.announceUltrabeasts = announceUltrabeasts;
+		write();
+	}
+
+	public void setAnnounceParadox(boolean announceParadox) {
+		this.announceParadox = announceParadox;
+		write();
+	}
+
+	private void write() {
+		Gson gson = Utils.newGson();
+		CompletableFuture<Boolean> futureWrite = Utils.writeFileAsync(LegendarySpawns.BASE_PATH,
+				"announcer.json", gson.toJson(this));
+
+		if (!futureWrite.join()) {
+			LegendarySpawns.LOGGER.fatal("Could not write Announcer for " + LegendarySpawns.MOD_ID + ".");
+		}
+	}
 }
