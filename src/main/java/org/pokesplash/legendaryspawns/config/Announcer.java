@@ -138,22 +138,18 @@ public class Announcer {
 
 	public void setAnnounceShinies(boolean announceShinies) {
 		this.announceShinies = announceShinies;
-		write();
 	}
 
 	public void setAnnounceLegendaries(boolean announceLegendaries) {
 		this.announceLegendaries = announceLegendaries;
-		write();
 	}
 
 	public void setAnnounceUltrabeasts(boolean announceUltrabeasts) {
 		this.announceUltrabeasts = announceUltrabeasts;
-		write();
 	}
 
 	public void setAnnounceParadox(boolean announceParadox) {
 		this.announceParadox = announceParadox;
-		write();
 	}
 
 	private void write() {

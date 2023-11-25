@@ -1,5 +1,6 @@
 package org.pokesplash.legendaryspawns.util;
 
+import com.cobblemon.mod.common.api.moves.MoveTemplate;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.pokemon.stats.Stat;
@@ -19,6 +20,7 @@ import org.pokesplash.legendaryspawns.LegendarySpawns;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class SpawnUtils {
@@ -91,6 +93,16 @@ public abstract class SpawnUtils {
 
 			legendary.setSpecies(species);
 			legendary.setLevel(70);
+			legendary.getMoveSet().clear();
+			Set<MoveTemplate> potentialMoves = legendary.getSpecies().getMoves().getLevelUpMovesUpTo(70);
+
+			for (int x=0; x < 4; x++) {
+				MoveTemplate move = Utils.getRandomValue(potentialMoves.stream().toList());
+				legendary.getMoveSet().setMove(x, move.create());
+				potentialMoves.remove(move);
+			}
+
+
 
 			PokemonProperties properties = new PokemonProperties();
 			properties.apply(legendary);
