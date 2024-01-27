@@ -74,4 +74,12 @@ public class Config {
 	public HashMap<String, ArrayList<String>> getPokemon() {
 		return pokemon;
 	}
+
+	public void setTimer(double timer) {
+		this.timer = timer;
+	}
+
+	public void setSpawnChance(double spawnChance) {
+		this.spawnChance = spawnChance;
+	}
 }

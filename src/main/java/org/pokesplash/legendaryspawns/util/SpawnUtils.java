@@ -27,6 +27,8 @@ public abstract class SpawnUtils {
 
 	public static void SpawnLegendary() {
 
+		System.out.println("Attempted spawn");
+
 		int randomNumber = ThreadLocalRandom.current().nextInt(1, 11);
 
 		// If spawn chance is success

@@ -21,6 +21,8 @@ public class Announcer {
 	private String paradoxCaughtMessage;
 	private boolean spawnHoverable;
 	private boolean captureHoverable;
+	private String boosterMessage;
+	private String boosterEndMessage;
 
 
 	public Announcer() {
@@ -40,6 +42,8 @@ public class Announcer {
 		paradoxCaughtMessage = "§b{player} §acaught an §3Paradox §b{pokemon}";
 		captureHoverable = true;
 		spawnHoverable = true;
+		boosterMessage = "§bA Legendary boost has begun for {time} minutes";
+		boosterEndMessage = "§bThe Legendary boost has ended";
 	}
 
 	public void init() {
@@ -61,6 +65,8 @@ public class Announcer {
 					paradoxCaughtMessage = cfg.getParadoxCaughtMessage();
 					spawnHoverable = cfg.isSpawnHoverable();
 					captureHoverable = cfg.isCaptureHoverable();
+					boosterMessage = cfg.getBoosterMessage();
+					boosterEndMessage = cfg.getBoosterEndMessage();
 				});
 
 		if (!futureRead.join()) {
@@ -151,6 +157,12 @@ public class Announcer {
 	public void setAnnounceParadox(boolean announceParadox) {
 		this.announceParadox = announceParadox;
 	}
+
+	public String getBoosterMessage() {
+		return boosterMessage;
+	}
+
+	public String getBoosterEndMessage() {return boosterEndMessage;}
 
 	private void write() {
 		Gson gson = Utils.newGson();

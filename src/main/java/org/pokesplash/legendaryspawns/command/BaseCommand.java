@@ -25,7 +25,8 @@ public class BaseCommand {
 
 		registeredCommand.addChild(new ReloadCommand().build());
 		registeredCommand.addChild(new ToggleCommand().build());
-
+		registeredCommand.addChild(new BoostCommand().build());
+		registeredCommand.addChild(new GetCommand().build());
 	}
 
 	public int run(CommandContext<ServerCommandSource> context) {
